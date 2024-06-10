@@ -7,8 +7,9 @@ This project is a starter template for building a REST API using Go, and is mean
 Make sure you have the following installed on your machine:
 
 - [Go](https://golang.org/doc/install) (version 1.22.3 or later)
-- [Xata](https://xata.io/) (for PostgreSQL database)
 - [Postman](https://www.postman.com/downloads/) (for API testing)
+
+You will also need a PostgreSQL database. You can create a free account on [Xata](https://xata.io/) to create a new PostgreSQL database.
 
 ## Project Structure
 
