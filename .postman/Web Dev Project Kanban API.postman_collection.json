@@ -1,0 +1,324 @@
+{
+	"info": {
+		"name": "Web Dev Project Kanban API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "xata_setup",
+			"item": [
+				{
+					"name": "Create Projects Table",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{xata_api_key}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"statement\": \"CREATE TABLE projects (name TEXT NOT NULL, repo_url TEXT, site_url TEXT, description TEXT, dependencies TEXT[], dev_dependencies TEXT[], status TEXT NOT NULL CHECK (status IN ('backlog', 'developing', 'done')));\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{postgres_url}}/sql",
+							"host": [
+								"{{postgres_url}}"
+							],
+							"path": [
+								"sql"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Users Table",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{xata_api_key}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"statement\": \"CREATE TABLE users (username TEXT NOT NULL UNIQUE, password TEXT NOT NULL);\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{postgres_url}}/sql",
+							"host": [
+								"{{postgres_url}}"
+							],
+							"path": [
+								"sql"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "USER LOGIN",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Login successful\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.environment.set(\"token\", \"Bearer \"+jsonData.token);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"myfirstuser\",\r\n    \"password\": \"password123\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "USER REGISTER",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Register successful\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.environment.set(\"token\", \"Bearer \"+jsonData.token);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"myfirstuser\",\r\n    \"password\": \"password123\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "projects",
+			"item": [
+				{
+					"name": "GET ALL PROJECTS",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/projects",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET PROJECT BY ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/projects/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"projects",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE PROJECT",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"My first project\",\r\n    \"repo_url\": \"https://github.com/m6io/my-project\",\r\n    \"site_url\": \"https://github.com/m6io/my-project-site\",\r\n    \"dependencies\": [\r\n        \"react\",\r\n        \"react-dom\"\r\n    ],\r\n    \"dev_dependencies\": [\r\n        \"@types/react-dom\",\r\n        \"@types/react\"\r\n    ],\r\n    \"status\": \"developing\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/projects",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE PROJECT BY ID",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"My first project\",\r\n    \"repo_url\": \"https://github.com/m6io/my-project\",\r\n    \"site_url\": \"https://github.com/m6io/my-project-site\",\r\n    \"dependencies\": [\r\n        \"react\",\r\n        \"react-dom\"\r\n    ],\r\n    \"dev_dependencies\": [\r\n        \"@types/react-dom\",\r\n        \"@types/react\"\r\n    ],\r\n    \"status\": \"developing\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/projects/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"projects",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE PROJECT BY ID",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/projects/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"projects",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "Bearer"
+		}
+	]
+}
