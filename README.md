@@ -22,8 +22,14 @@ You will also need a PostgreSQL database. You can create a free account on [Xata
 ## Setting Up the Project
 
 1. **Clone the Repository**
-   `git clone https://github.com/m6io/web-dev-project-kanban-api-starter.git`
-   `cd web-dev-project-kanban-api-starter`
+
+```bash
+git clone https://github.com/m6io/web-dev-project-kanban-api-starter.git
+```
+
+```bash
+cd web-dev-project-kanban-api-starter
+```
 
 Alternatively, you can initialize a new Go module in an existing project directory:
 
@@ -33,7 +39,10 @@ go mod init github.com/your-username/your-project-name
 
 2. **Install Dependencies**
    Run the following commands to install the required dependencies
-   `go get github.com/golang-jwt/jwt/v5 github.com/gorilla/mux github.com/joho/godotenv github.com/justinas/alice github.com/lib/pq github.com/xeipuuv/gojsonschema golang.org/x/crypto`
+
+```bash
+go get github.com/golang-jwt/jwt/v5 github.com/gorilla/mux github.com/joho/godotenv github.com/justinas/alice github.com/lib/pq github.com/xeipuuv/gojsonschema golang.org/x/crypto
+```
 
 3. **Set Up A Xata Account (or your oww Postgres Database)**
    Create a free account on [Xata](https://xata.io/) and create a new database. You can also use your own PostgreSQL database, but you will need to update the code to accommodate your database configuration.
@@ -47,7 +56,10 @@ JWT_SECRET=your_jwt_secret_key
 ```
 
 5. **Run the Application**
-   "go run main.go"
+
+```bash
+go run main.go
+```
 
 You can also use the `air` package to run the application. Install the package using the following command:
 
